@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+    <!--gcloud cron config-->
+    <cron>
+        <!-- the job class to run code, should return 200 - 299 to indicate ok-->
+        <url>/cron/dailyShareInfo</url>
+        <!--target if not config,the job will run in default service-->
+        <!--<target>beta</target> -->
+        <description>大A行情Job午盘</description>
+        <!--cron expression syntax reference  https://cloud.google.com/appengine/docs/standard/java/config/cronref-->
+        <schedule>every day 12:00</schedule>
+        <timezone>Asia/Shanghai</timezone>
+    </cron>
+
+    <cron>
+        <!-- the job class to run code, should return 200 - 299 to indicate ok-->
+        <url>/cron/dailyShareInfo</url>
+        <!--target if not config,the job will run in default service-->
+        <!--<target>beta</target> -->
+        <description>大A行情Job尾盘</description>
+        <!--cron expression syntax reference  https://cloud.google.com/appengine/docs/standard/java/config/cronref-->
+        <schedule>every day 14:45</schedule>
+        <timezone>Asia/Shanghai</timezone>
+    </cron>
+</cronentries>

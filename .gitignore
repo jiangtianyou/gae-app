@@ -1,0 +1,12 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### IntelliJ IDEA ###
+.idea
+target
+gae-app.iml
+src/main/resources/cipher.jar
+src/main/resources/rebel.xml
+*.iws
+*.iml
+*.ipr
