@@ -93,16 +93,23 @@ public class GoogleDatastoreController {
 	@ResponseBody
 	public String  get(){
 		FetchOptions fetchOptions = FetchOptions.Builder.withLimit(100);
-		Query q = new Query("Person").addSort("name", Query.SortDirection.ASCENDING);
+		Query q = new Query("WarningPoint");
 		PreparedQuery pq = datastore.prepare(q);
 
 		QueryResultList<Entity> results;
-		try {
-			results = pq.asQueryResultList(fetchOptions);
-		} catch (IllegalArgumentException e) {
-			return "fail";
-		}
-		return "ok";
+//		try {
+//			results = pq.asQueryResultList(fetchOptions);
+//			Entity entity = results.get(0);
+//			Long CYB_MIN  = (Long) entity.getProperty("CYB_MIN");
+//			Long CYB_MAX  = (Long) entity.getProperty("CYB_MAX");
+//			Long SZ_MIN  = (Long) entity.getProperty("SZ_MIN");
+//			Long SZ_MAX  = (Long) entity.getProperty("SZ_MAX");
+//			Boolean IS_CLOSE = (Boolean) entity.getProperty("IS_CLOSE");
+//			return CYB_MIN + "| "+CYB_MAX + "| "+SZ_MIN + "| "+SZ_MAX + "| " +IS_CLOSE;
+//		} catch (IllegalArgumentException e) {
+//			return "fail";
+//		}
+		return null;
 	}
 
 

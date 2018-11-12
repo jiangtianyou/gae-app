@@ -7,22 +7,19 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("mail")
+@RequestMapping("test")
 public class TestController {
-	@Autowired
-	private OkayApiMailService service;
 
-	@RequestMapping("send")
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@RequestMapping("")
 	@ResponseBody
 	public ReturnMsg sendMail() {
-		try {
-			service.sendMail("420671626@qq.com", "测试", "测试内容");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ReturnMsg(ReturnMsg.Response.APP_NG);
-		}
-		return new ReturnMsg(ReturnMsg.Response.APP_OK);
+		String forObject = restTemplate.getForObject("http://hb5.api.okayapi.com/", String.class);
+		return new ReturnMsg(ReturnMsg.Response.APP_OK,forObject);
 	}
 }

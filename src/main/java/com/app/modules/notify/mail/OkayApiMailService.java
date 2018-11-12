@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.util.DateUtils;
 
 import java.util.*;
+import java.util.function.IntFunction;
 
 @Service
 public class OkayApiMailService {
@@ -126,9 +127,4 @@ public class OkayApiMailService {
 		}
 		return data;
 	}
-
-
-
-
-
 }

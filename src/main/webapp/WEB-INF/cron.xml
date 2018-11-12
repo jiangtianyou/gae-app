@@ -22,4 +22,15 @@
         <schedule>every day 14:45</schedule>
         <timezone>Asia/Shanghai</timezone>
     </cron>
+
+    <cron>
+        <!-- the job class to run code, should return 200 - 299 to indicate ok-->
+        <url>/cron/buyPointWarning</url>
+        <!--target if not config,the job will run in default service-->
+        <!--<target>beta</target> -->
+        <description>预设买入点位告警</description>
+        <!--cron expression syntax reference  https://cloud.google.com/appengine/docs/standard/java/config/cronref-->
+        <schedule>every 5 minutes from 09:00 to 15:00</schedule>
+        <timezone>Asia/Shanghai</timezone>
+    </cron>
 </cronentries>
