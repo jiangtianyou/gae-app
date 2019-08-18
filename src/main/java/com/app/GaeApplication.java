@@ -9,14 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
-
-/**
- * primary configuration class
- * equal to open fellow 3 features
- * @EnableAutoConfiguration
- * @ComponentScan
- * @Configuration
- */
 @SpringBootApplication
 @Controller
 public class GaeApplication  extends SpringBootServletInitializer {
@@ -24,7 +16,6 @@ public class GaeApplication  extends SpringBootServletInitializer {
 		SpringApplication.run(GaeApplication.class, args);
 	}
 
-	// SpringBootServletInitializer war启动支持
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(GaeApplication.class);

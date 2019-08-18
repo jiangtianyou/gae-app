@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.thymeleaf.util.DateUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.function.IntFunction;
 
@@ -99,8 +100,7 @@ public class OkayApiMailService {
 		String date = (String) list.get(0).get("date");
 		date = date.replaceFirst("-", "年");
 		date = date.replaceFirst("-", "月");
-		TimeZone timeZone = TimeZone.getTimeZone("Asia/Shanghai");
-		String panStr = DateUtils.createNow(timeZone).get(Calendar.HOUR_OF_DAY)<13?"午盘":"尾盘";
+		String panStr = LocalDateTime.now(ZoneId.of("Asia/Shanghai")).getHour()<13?"午盘":"尾盘";
 		rtn.put("dateStr",date);
 		rtn.put("panStr",panStr);
 		list.removeIf(Objects::isNull);

@@ -1,0 +1,45 @@
+
+# email use okayapi service
+email:
+  url: http://hb5.api.okayapi.com
+  key: 2E8382DCD4CDD12F1EDFA882054A6EA4
+
+#Shenjianshou stock api
+share:
+  info:
+    url: https://api.shenjian.io/?appid=57fdf56193ab5fd4f3f98f6d7b69c3a0
+
+
+server:
+  port: 8080
+  servlet:
+    context-path: /generator
+tomcat:
+  remote-ip-header: x-forward-for
+  uri-encoding: UTF-8
+  max-threads: 10
+  background-processor-delay: 30
+  basedir: ${user.home}/tomcat/
+spring:
+  banner:
+    charset: UTF-8
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+  application:
+    name: spring-boot-code-generator
+  freemarker:
+    request-context-attribute: request
+    suffix: .ftl
+    content-type: text/html
+    enabled: true
+    cache: false
+    charset: UTF-8
+    allow-request-override: false
+    expose-request-attributes: true
+    expose-session-attributes: true
+    expose-spring-macro-helpers: true
+    #template-loader-path: classpath:/templates/
+  mvc:
+    static-path-pattern: /static/**

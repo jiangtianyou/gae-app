@@ -2,7 +2,6 @@ package com.app.modules.google;
 
 import com.app.modules.common.bean.ReturnMsg;
 import com.app.modules.common.controller.BaseController;
-import com.app.modules.common.utils.HtmlTemplateUtil;
 import com.app.modules.google.bean.ShareInfoBean;
 import com.app.modules.notify.ding.controller.DingtalkService;
 import com.app.modules.notify.mail.OkayApiMailService;
@@ -35,29 +34,8 @@ public class GoogleCronController extends BaseController {
 	@RequestMapping("dailyShareInfo")
     @ResponseBody
     public ReturnMsg sendMail() {
-        try {
-            int weekValue = LocalDate.now(ZoneId.of("Asia/Shanghai")).getDayOfWeek().getValue();
-            // 不能用Calendar.saturday Calendar.sunday 因为Calendar类中sunday的值为1
-            if (weekValue == 6 || weekValue == 7) {
-                //周六 周日 不发送周报
-                return new ReturnMsg(ReturnMsg.Response.APP_OK);
-            }
-            Map<String, Object> mailShareInfo = okMailService.getMailShareInfo();
-            String mailHtml = HtmlTemplateUtil.render("notify/mail.html", mailShareInfo);
-
-			dingtalkService.sendTextMessageWithAtAll(okMailService.getDingShareInfo(mailShareInfo).toString());
-			/*
-			* 1、多邮件用英文;进行分割
-			* 2、先发钉 再发邮件 钉的api比较稳定 邮件api不太稳定
-			*/
-            okMailService.sendMail(notifyToMail, (String) mailShareInfo.get("title"), mailHtml);
-        } catch (Exception e) {
-        	logger.severe("发送通知消息出现严重错误！无法进行正常发送!");
-            e.printStackTrace();
-            return new ReturnMsg(ReturnMsg.Response.APP_NG);
-        }
-        return new ReturnMsg(ReturnMsg.Response.APP_OK);
-    }
+		return null;
+	}
 
 
 	// 买入点位预警
