@@ -56,7 +56,6 @@ public class IndexController {
             params.put("packageName", packageName);
             params.put("returnUtil", returnUtil);
 	        params.put("isJoin", isJoin);
-
             // result
             Map<String, String> result = new HashMap<String, String>();
 

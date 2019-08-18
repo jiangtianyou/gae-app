@@ -42,4 +42,4 @@ spring:
     expose-spring-macro-helpers: true
     #template-loader-path: classpath:/templates/
   mvc:
-    static-path-pattern: /static/**
+    static-path-pattern: /public/**

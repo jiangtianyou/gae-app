@@ -272,9 +272,42 @@ public class TableParseUtil {
         codeJavaInfo.setTableName(tableName);
         codeJavaInfo.setClassName(className);
         codeJavaInfo.setClassComment(classComment);
+        // 如果有del_flag与倒数第二位置的元素进行交换 为了生成代码不带多余的逗号
+        if (containDelFlag(fieldList)) {
+            FieldInfo delFlag = fieldList.stream().filter(fieldInfo -> fieldInfo.getColumnName().equals("del_flag")).findFirst().get();
+            int indexOfDelFlag = fieldList.indexOf(delFlag);
+            swap1(fieldList,indexOfDelFlag,fieldList.size()-2);
+        }
         codeJavaInfo.setFieldList(fieldList);
 
         return codeJavaInfo;
     }
 
+
+    private static boolean containDelFlag(List<FieldInfo> list) {
+        long del_flag = list.stream().filter(fieldInfo -> fieldInfo.getColumnName().equals("del_flag")).count();
+        return del_flag > 0 ;
+    }
+
+    public static <T> void swap1(List<T> list, int oldPosition, int newPosition){
+        if(null == list){
+            throw new IllegalStateException("The list can not be empty...");
+        }
+        T tempElement = list.get(oldPosition);
+
+        // 向前移动，前面的元素需要向后移动
+        if(oldPosition < newPosition){
+            for(int i = oldPosition; i < newPosition; i++){
+                list.set(i, list.get(i + 1));
+            }
+            list.set(newPosition, tempElement);
+        }
+        // 向后移动，后面的元素需要向前移动
+        if(oldPosition > newPosition){
+            for(int i = oldPosition; i > newPosition; i--){
+                list.set(i, list.get(i - 1));
+            }
+            list.set(newPosition, tempElement);
+        }
+    }
 }

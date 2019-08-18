@@ -1,3 +1,4 @@
+<#assign upper = "com.app.modules.common.utils.freemarker.UpperDirective"?new()>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -68,11 +69,11 @@
     <update id="update" parameterType="${packageName}.entity.${classInfo.className}">
         UPDATE ${classInfo.tableName}
         <set>
-            <#list classInfo.fieldList as fieldItem >
-                <#if fieldItem.columnName != "id" && fieldItem.columnName != "update_date" && fieldItem.columnName != "UpdateTime" >
-                    ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}${fieldItem.columnName} = ${r"#{"}${fieldItem.fieldName}${r"}"}<#if fieldItem_has_next>,</#if>${r"</if>"}
-                </#if>
-            </#list>
+        <#list classInfo.fieldList as fieldItem >
+            <#if fieldItem.columnName != "id" && fieldItem.columnName != "create_date" && fieldItem.columnName != "del_flag" >
+            ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}${fieldItem.columnName} = ${r"#{"}${fieldItem.fieldName}${r"}"}<#if fieldItem_has_next>,</#if>${r"</if>"}
+            </#if>
+        </#list>
         </set>
         WHERE id = ${r"#{"}id${r"}"}
     </update>
@@ -82,7 +83,5 @@
         SET del_flag = 1
         WHERE id = ${r"#{id}"}
     </udpate>
-
-
 
 </mapper>

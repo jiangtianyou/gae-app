@@ -104,8 +104,6 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">是否含一对多关联</span>
             </div>
-<#--            <input type="text" class="form-control" id="packageName" name="packageName"-->
-<#--                   placeholder="com.softdev.system">-->
             <input type="text" class="form-control" id="isJoin" name="isJoin"
                                value="NO">
         </div>
