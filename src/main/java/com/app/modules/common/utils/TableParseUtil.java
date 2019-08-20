@@ -20,12 +20,7 @@ import java.util.regex.Pattern;
  */
 public class TableParseUtil {
 
-    /**
-     * 解析建表SQL生成代码（model-dao-xml）
-     *
-     * @param tableSql
-     * @return
-     */
+
     public static ClassInfo processTableIntoClassInfo(String tableSql) throws IOException {
         if (tableSql==null || tableSql.trim().length()==0) {
             throw new CodeGenerateException("Table structure can not be empty.");
@@ -96,6 +91,7 @@ public class TableParseUtil {
         }
         //如果备注跟;混在一起，需要替换掉
         classComment=classComment.replaceAll(";","");
+        classComment = classComment.endsWith("表") ? org.apache.commons.lang3.StringUtils.chop(classComment): classComment;
         // field List
         List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
 
@@ -202,7 +198,7 @@ public class TableParseUtil {
                             if((fanwei.length>1&&"0".equals(fanwei[1]))||fanwei.length==1){
                                 int length=Integer.parseInt(fanwei[0]);
                                 if(fanwei.length>1) {
-                                    length=Integer.valueOf(fanwei[1]);
+                                    length=Integer.parseInt(fanwei[1]);
                                 }
                                 //数字范围9位及一下用Integer，大的用Long
                                 if(length<=9){

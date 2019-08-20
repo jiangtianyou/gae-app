@@ -8,14 +8,14 @@
     <@netCommon.commonStyle />
 
     <@netCommon.commonScript />
-    <#--<script src="${request.contextPath}/static/js/index-new.js"></script>-->
     <script>
+        var ddlSqlArea
         $(function () {
 
             /**
              * 初始化 table sql 3
              */
-            var ddlSqlArea = CodeMirror.fromTextArea(document.getElementById("ddlSqlArea"), {
+            ddlSqlArea = CodeMirror.fromTextArea(document.getElementById("ddlSqlArea"), {
                 lineNumbers: true,
                 matchBrackets: true,
                 mode: "text/x-sql",
@@ -46,14 +46,13 @@
 
                 var tableSql = ddlSqlArea.getValue();
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     url: base_url + "/genCode",
                     data: {
                         "tableSql": tableSql,
                         "packageName": $("#packageName").val(),
                         "isJoin": $("#isJoin").val(),
-                        "returnUtil": $("#returnUtil").val(),
-                        "authorName": $("#authorName").val()
+                        "hasApi": $("#hasApi").val()
                     },
                     dataType: "json",
                     success: function (data) {
@@ -79,6 +78,8 @@
                     }
                 });
             });
+
+
             /**
              * 按钮事件组
              */
@@ -109,9 +110,9 @@
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text">返回封装</span>
+                <span class="input-group-text">Controller是否包含APi</span>
             </div>
-            <input type="text" class="form-control" id="returnUtil" name="returnUtil" value="ReturnMsg">
+            <input type="text" class="form-control" id="hasApi" name="hasApi" value="YES">
         </div>
         <textarea id="ddlSqlArea" placeholder="请输入表结构信息..." class="form-control btn-lg" style="height: 250px;">
 CREATE TABLE `member` (
@@ -123,10 +124,12 @@ CREATE TABLE `member` (
   `remarks` varchar(255) COLLATE utf8_bin DEFAULT NULL comment '备注',
   `del_flag` varchar(1) COLLATE utf8_bin DEFAULT '0' comment '删除标记',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin_log comment '测试用户表'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin_log comment='用户'
         </textarea><br>
         <p>
             <button class="btn btn-primary" id="btnGenCode">开始生成 »</button>
+            <button id="download" class="btn btn-primary" style="margin-left: 20px">下载所有文件</button>
+
         </p>
         <hr>
         <div class="row" style="margin-top: 10px;">
@@ -138,7 +141,7 @@ CREATE TABLE `member` (
                 </div>
                 <div class="btn-group" role="group" aria-label="First group">
                     <button type="button" class="btn btn-default generator" id="model">entity(set/get)</button>
-                    <button type="button" class="btn btn-default generator" id="model">entity(set/get)</button>
+                    <button type="button" class="btn btn-default generator" id="converter">converter</button>
                 </div>
             </div>
             <div class="btn-toolbar col-md-7" role="toolbar" aria-label="Toolbar with button groups">
@@ -152,6 +155,7 @@ CREATE TABLE `member` (
                     <button type="button" class="btn btn-default generator" id="mapper">mapper</button>
                     <button type="button" class="btn btn-default generator" id="service">service</button>
                     <button type="button" class="btn btn-default generator" id="controller">controller</button>
+                    <button type="button" class="btn btn-default generator" id="api">controller-api</button>
                 </div>
             </div>
         </div>
@@ -161,12 +165,17 @@ CREATE TABLE `member` (
             <div class="btn-toolbar col-md-5" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <div class="btn btn-secondary disabled" id="btnGroupAddon">DTO</div>
+                        <div class="btn btn-secondary disabled" id="btnGroupAddon">VO</div>
                     </div>
                 </div>
                 <div class="btn-group" role="group" aria-label="First group">
-                    <button type="button" class="btn btn-default generator" id="beetlentitydto">
-                        entitydto(lombok+swagger)
+                    <button type="button" class="btn btn-default generator" id="vo">
+                        vo(详情)
+                    </button>
+                </div>
+                <div class="btn-group" role="group" aria-label="First group">
+                    <button type="button" class="btn btn-default generator" id="listVo">
+                        listVo(列表)
                     </button>
                 </div>
             </div>
@@ -217,6 +226,19 @@ CREATE TABLE `member` (
     </footer>
 </div> <!-- /container -->
 
-
+<form id="downloadForm" action="/download" method="get" >
+    <input type="text" name="tableSql" value="" hidden>
+    <input type="text" name="packageName" value="" hidden>
+    <input type="text" name="isJoin" value="" hidden>
+</form>
+<script>
+    // 下载文件
+    $('#download').click(function () {
+        $('#downloadForm > input[name=tableSql]').val(ddlSqlArea.getValue());
+        $('#downloadForm > input[name=isJoin]').val($("#isJoin").val());
+        $('#downloadForm > input[name=packageName]').val($("#packageName").val());
+        $("#downloadForm").submit();
+    });
+</script>
 </body>
 </html>

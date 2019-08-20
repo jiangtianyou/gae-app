@@ -15,14 +15,25 @@ import com.wdit.common.persistence.Page;
 import static com.wdit.common.utils.ApiUtils.buildPage;
 import ${packageName}.vo.${classInfo.className}Vo;
 import ${packageName}.vo.${classInfo.className}ListVo;
-
-<#macro allParamList>
+<#-- 方法签名上用-->
+<#macro noIdParamListMethod>
     <#list classInfo.fieldList as fieldItem >
-        ${fieldItem.fieldClass} ${fieldItem.fieldName}<#if fieldItem_has_next>,</#if><#t>
+        <#if fieldItem.columnName != "id" && fieldItem.columnName != "create_date" &&  fieldItem.columnName != "update_date" &&  fieldItem.columnName != "del_flag" &&  fieldItem.columnName != "remarks">
+            @RequestParam(name="${fieldItem.fieldName}") ${fieldItem.fieldClass} ${fieldItem.fieldName}<#if fieldItem_has_next>,</#if><#t>
+        </#if>
+    </#list>
+</#macro>
+
+<#macro noIdParamListRequireFalse>
+    <#list classInfo.fieldList as fieldItem >
+        <#if fieldItem.columnName != "id">
+            @RequestParam(name="${fieldItem.fieldName}", required= false) ${fieldItem.fieldClass} ${fieldItem.fieldName}<#if fieldItem_has_next>,</#if><#t>
+        </#if>
     </#list>
 </#macro>
 
 
+<#-- 方法体内用-->
 <#macro noIdParamList>
     <#list classInfo.fieldList as fieldItem >
         <#if fieldItem.columnName != "id">
@@ -47,52 +58,50 @@ import ${packageName}.vo.${classInfo.className}ListVo;
     </#list>
 </#macro>
 
-
-
-
-public class ${classInfo.className}Controller extends BaseController implements ${classInfo.className}Api {
+@RequestMapping(value = "${r"${modulePath}"}/${classInfo.className ? uncap_first}")
+public class ${classInfo.className}Controller extends BaseController{
 
     @Autowired
     private ${classInfo.className}Service ${classInfo.className?uncap_first}Service;
 
 
-    @Override
-    public Boolean insert(<@noIdParamList/>){
+    @PostMapping("/insert")
+    public ReturnMsg<Object> insert(<@noIdParamListMethod/>){
         ${classInfo.className} entity = readForm(<@noIdParamValueList/>);
         ${classInfo.className?uncap_first}Service.save(entity);
-        return true;
+        return successResult();
     }
 
-
-    @Override
-    public Boolean delete(String id){
+    @PostMapping("/delete")
+    public ReturnMsg<Object> delete(@RequestParam(name="id") String id){
         ${classInfo.className?uncap_first}Service.delete(id);
         return true;
     }
 
 
-    @Override
-    public Boolean update(<@allParamList/>){
+    @PostMapping("/update")
+    public ReturnMsg<Object> update(@RequestParam(name="id") String id,<@noIdParamListRequireFalse/>){
         ${classInfo.className} entity = ${classInfo.className?uncap_first}Service.get(id);
         if(entity == null){
-             throw new BusinessException("找不到id对应${classInfo.classComment}");
+             throw failResult("找不到id对应${classInfo.classComment}");
         }
         <@noIdSelectiveSet/>
         ${classInfo.className?uncap_first}Service.save(entity);
         return true;
     }
 
-    @Override
-    public ${classInfo.className}Vo get(String id){
+    @PostMapping("/get")
+    public ReturnMsg<${classInfo.className}Vo> get(@RequestParam(name="id") String id){
         ${classInfo.className} entity = ${classInfo.className?uncap_first}Service.get(id);
         if(entity == null){
-            throw new BusinessException("找不到id对应${classInfo.classComment}");
+            throw failResult("找不到id对应${classInfo.classComment}");
         }
         return ${classInfo.className}Converter.convert(entity);
     }
 
-    @Override
-    public PageVo<${classInfo.className}ListVo> findList(Integer pageNo,Integer pageSize) {
+    @PostMapping("/findList")
+    public ReturnMsg${r"<PageVo<"}${classInfo.className}ListVo>> findList(@RequestParam(name = "pageNo") Integer pageNo,
+                     @RequestParam(name = "pageSize") Integer pageSize) {
 
         ${classInfo.className} entity = new ${classInfo.className}();
         entity.setQueryProp("xxxx", siteId);
