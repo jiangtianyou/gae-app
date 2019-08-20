@@ -32,6 +32,7 @@ import ${packageName}.vo.${classInfo.className}ListVo;
 </#macro>
 @Api("${classInfo.classComment}管理")
 @RequestMapping(value = "${r"${modulePath}"}/${classInfo.className ? uncap_first}")
+@RestController
 public interface ${classInfo.className}Api {
 
     @ApiOperation(value = "新增")

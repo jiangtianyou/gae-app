@@ -59,6 +59,7 @@ import ${packageName}.vo.${classInfo.className}ListVo;
 </#macro>
 
 @RequestMapping(value = "${r"${modulePath}"}/${classInfo.className ? uncap_first}")
+@RestController
 public class ${classInfo.className}Controller extends BaseController{
 
     @Autowired
@@ -75,7 +76,7 @@ public class ${classInfo.className}Controller extends BaseController{
     @PostMapping("/delete")
     public ReturnMsg<Object> delete(@RequestParam(name="id") String id){
         ${classInfo.className?uncap_first}Service.delete(id);
-        return true;
+        return successResult();
     }
 
 
@@ -87,7 +88,7 @@ public class ${classInfo.className}Controller extends BaseController{
         }
         <@noIdSelectiveSet/>
         ${classInfo.className?uncap_first}Service.save(entity);
-        return true;
+        return successResult();
     }
 
     @PostMapping("/get")
