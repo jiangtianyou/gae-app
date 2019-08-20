@@ -101,7 +101,7 @@
                 <span class="input-group-text">包名路径</span>
             </div>
             <input type="text" class="form-control" id="packageName" name="packageName"
-                   value="com.wdit.module.xxx">
+                   value="com.wdit.modules.xxx">
             <div class="input-group-prepend">
                 <span class="input-group-text">是否含一对多关联</span>
             </div>

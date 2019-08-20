@@ -42,7 +42,8 @@ import ${packageName}.vo.${classInfo.className}ListVo;
 <#macro noIdSelectiveSet>
     <#list classInfo.fieldList as fieldItem >
         <#if fieldItem.columnName != "id">
-        entity.set${fieldItem.fieldName?cap_first}(ifNull(${fieldItem.fieldName},entity.get${fieldItem.fieldName?cap_first}));
+<#--    entity.set${fieldItem.fieldName?cap_first}(ifNull(${fieldItem.fieldName},entity.get${fieldItem.fieldName?cap_first}()));-->
+        entity.set${fieldItem.fieldName?cap_first}(${fieldItem.fieldName});
         </#if>
     </#list>
 </#macro>

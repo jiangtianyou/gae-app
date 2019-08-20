@@ -10,7 +10,6 @@ import com.app.modules.common.utils.MyZip;
 import com.app.modules.generator.entity.ClassInfo;
 import com.app.modules.generator.entity.FieldInfo;
 import com.app.modules.generator.entity.ReturnT;
-import com.google.appengine.repackaged.com.google.common.collect.Lists;
 import com.google.common.base.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class IndexController extends BaseController {
@@ -57,7 +53,7 @@ public class IndexController extends BaseController {
 		Map<String, String> map = generateDataMap(tableSql, packageName, isJoin,hasApi);
 
 		Map<String, String> fileNamesMap = fileNamesMap(classInfo.getClassName());
-		List<MyZip.MemoryFile> memoryFiles = Lists.newArrayList();
+		List<MyZip.MemoryFile> memoryFiles = new ArrayList<>();
 		for (String key : map.keySet()) {
 			String fileName = fileNamesMap.get(key);
 			byte[] content = map.get(key).getBytes(Charsets.UTF_8);
