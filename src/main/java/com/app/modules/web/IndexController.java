@@ -1,8 +1,6 @@
 package com.app.modules.web;
 
 
-import cn.hutool.log.Log;
-import cn.hutool.log.LogFactory;
 import com.app.modules.common.controller.BaseController;
 import com.app.modules.common.utils.CodeGeneratorTool;
 import com.app.modules.common.utils.FreemarkerTool;
@@ -23,7 +21,6 @@ import java.util.*;
 
 @Controller
 public class IndexController extends BaseController {
-	private Log log = LogFactory.get(this.getClass());
 
 	@Autowired
 	private FreemarkerTool freemarkerTool;
@@ -33,24 +30,26 @@ public class IndexController extends BaseController {
 		return "index";
 	}
 
+
 	@RequestMapping("/genCode")
 	@ResponseBody
-	public ReturnT<Map<String, String>> codeGenerate(String tableSql, String packageName,String isJoin,String hasApi) throws Exception {
+	public ReturnT<Map<String, String>> codeGenerate(String tableSql, String packageName, String isJoin,
+	                                                 String hasApi) throws Exception {
 
 		if (StringUtils.isBlank(tableSql)) {
 			return new ReturnT<>(ReturnT.FAIL_CODE, "表结构信息不可为空");
 		}
-		Map<String, String> result = generateDataMap(tableSql, packageName, isJoin,hasApi);
+		Map<String, String> result = generateDataMap(tableSql, packageName, isJoin, hasApi);
 		return new ReturnT<>(result);
 
 	}
 
 
 	@RequestMapping("download")
-	public void download(String tableSql,String packageName, String isJoin,String hasApi, HttpServletResponse res) throws Exception {
+	public void download(String tableSql, String packageName, String isJoin, String hasApi, HttpServletResponse res) throws Exception {
 
 		ClassInfo classInfo = CodeGeneratorTool.processTableIntoClassInfo(tableSql);
-		Map<String, String> map = generateDataMap(tableSql, packageName, isJoin,hasApi);
+		Map<String, String> map = generateDataMap(tableSql, packageName, isJoin, hasApi);
 
 		Map<String, String> fileNamesMap = fileNamesMap(classInfo.getClassName());
 		List<MyZip.MemoryFile> memoryFiles = new ArrayList<>();
@@ -65,12 +64,12 @@ public class IndexController extends BaseController {
 
 		res.setContentType("application/octet-stream");
 		res.addHeader("Content-Length", "" + zipByteArray.length);
-		res.addHeader("Content-Disposition", "attachment;filename=source.zip");
-
+		res.addHeader("Content-Disposition", "attachment;filename=" + classInfo.getClassName().toLowerCase() +
+				"_source.zip");
 		StreamUtils.copy(zipByteArray, res.getOutputStream());
 	}
 
-	private Map<String, String> generateDataMap(String tableSql, String packageName, String isJoin,String hasApi) throws Exception {
+	private Map<String, String> generateDataMap(String tableSql, String packageName, String isJoin, String hasApi) throws Exception {
 		Map<String, String> result = new HashMap<>();
 
 		//mybatis 需要 del_flag 等字段
@@ -81,11 +80,12 @@ public class IndexController extends BaseController {
 		Map<String, Object> lessFieldMapParam = buildParam(tableSql, packageName, isJoin, true);
 		result.put("service", freemarkerTool.processString("code-generator/mybatis/service.ftl", lessFieldMapParam));
 		String template = "code-generator/mybatis/controller.ftl";
-		if (StringUtils.equalsIgnoreCase(hasApi,"NO")) {
+		if (StringUtils.equalsIgnoreCase(hasApi, "NO")) {
 			template = "code-generator/mybatis/controller-no-api.ftl";
 		}
 		result.put("controller", freemarkerTool.processString(template, lessFieldMapParam));
-		result.put("converter", freemarkerTool.processString("code-generator/mybatis/converter.ftl", lessFieldMapParam));
+		result.put("converter", freemarkerTool.processString("code-generator/mybatis/converter.ftl",
+				lessFieldMapParam));
 		result.put("mapper", freemarkerTool.processString("code-generator/mybatis/mapper.ftl", lessFieldMapParam));
 		result.put("model", freemarkerTool.processString("code-generator/mybatis/model.ftl", lessFieldMapParam));
 		result.put("vo", freemarkerTool.processString("code-generator/mybatis/vo.ftl", lessFieldMapParam));
@@ -95,7 +95,8 @@ public class IndexController extends BaseController {
 	}
 
 
-	private Map<String, Object> buildParam(String tableSql, String packageName, String isJoin,Boolean removeUselessField) throws Exception {
+	private Map<String, Object> buildParam(String tableSql, String packageName, String isJoin,
+	                                       Boolean removeUselessField) throws Exception {
 		if (StringUtils.isBlank(isJoin)) {
 			isJoin = "NO";
 		}
@@ -117,14 +118,16 @@ public class IndexController extends BaseController {
 
 	private Map<String, String> fileNamesMap(String className) {
 		Map<String, String> map = new HashMap<>();
-		map.put("controller", className + "Controller.java");
-		map.put("service", className + "Service.java");
-		map.put("converter", className + "Converter.java");
-		map.put("mapper", className + "Dao.java");
-		map.put("mybatis", className + "Dao.xml");
-		map.put("api", className + "Api.java");
-		map.put("vo", className + "Vo.java");
-		map.put("listVo", className + "ListVo.java");
+//		String dir = className + "/";
+		String dir = "";
+		map.put("controller", dir + className + "Controller.java");
+		map.put("service", dir + className + "Service.java");
+		map.put("converter", dir + className + "Converter.java");
+		map.put("mapper", dir + className + "Dao.java");
+		map.put("mybatis", dir + className + "Dao.xml");
+		map.put("api", dir + className + "Api.java");
+		map.put("vo", dir + "vo/" + className + "Vo.java");
+		map.put("listVo", dir + "vo/" + className + "ListVo.java");
 		return map;
 
 	}

@@ -119,6 +119,7 @@ CREATE TABLE `member` (
   `id` varchar(64) COLLATE utf8_bin NOT NULL COMMENT 'id',
   `nickname` varchar(10) COLLATE utf8_bin NOT NULL comment '昵称',
   `address` varchar(100) COLLATE utf8_bin NOT NULL comment '地址',
+  `status` varchar(100) COLLATE utf8_bin NOT NULL comment '账号状态',
   `create_date` datetime DEFAULT NULL comment '创建时间',
   `update_date` datetime DEFAULT NULL comment '更新时间',
   `remarks` varchar(255) COLLATE utf8_bin DEFAULT NULL comment '备注',
